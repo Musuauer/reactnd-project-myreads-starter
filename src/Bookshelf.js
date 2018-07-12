@@ -1,22 +1,27 @@
 import React from 'react'
 import Book from './Book'
-import * as BooksAPI from './BooksAPI'
+
 
 class Bookshelf extends React.Component {
-  state = {}
+  state = {
+   
+  }
+
+ 
 
   render(){
     const books = this.props.books
     return (
       <div className="bookshelf">
-      <h2 className="bookshelf-title">Currently Reading</h2>
+      <h2 className="bookshelf-title">{this.props.shelf}</h2>
       <div className="bookshelf-books">
         <ol className="books-grid">
   
         {books.map( book => (
           <li key= {book.id}> 
           <Book
-          book= {book}/>
+          book= {book}
+          updateShelf={this.props.changeShelf}/>
           
         </li>
         )
