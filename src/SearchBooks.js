@@ -1,58 +1,53 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import * as BooksAPI from './BooksAPI'
-
-class SearchBooks extends React.Component {
-  state = {
-    query: ''
-  }
-
-  updateQuery = (query) => {
-    this.setState({ query: query.trim() })
-  }
+import Book from './Book'
+import sortBy from 'sort-by'
 
 
-  render(){
-
-    const query = this.state.query
-
-
+function SearchBooks (props) {
+  let books = props.searchedBooks
+  let query = props.query
+  const updateQuery = props.updateQuery
+  
+  books.sort(sortBy('title'))  // sort alphabetically
     return (
      
       <div className="search-books">
             <div className="search-books-bar">
-              <Link 
-              to='/'
-              className="close-search" 
-              >Close</Link>
-              <div className="search-books-input-wrapper">
-                {/*
-                  NOTES: The search from BooksAPI is limited to a particular set of search terms.
-                  You can find these search terms here:
-                  https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
+                <Link
+                    to='/'
+                    className="close-search" 
+                    >Close
+                </Link>
+                <div className="search-books-input-wrapper">
+                    <input
+                        type="text"
+                        placeholder="Search by title or author"
+                        value= {query}
+                        onChange={(event) => updateQuery(event.target.value)}
+                    />
 
-                  However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
-                  you don't find a specific author or title. Every search is limited by search terms.
-                */}
-                <input 
-                type="text" 
-                placeholder="Search by title or author"
-                value= {query}
-                onChange={(event) => this.updateQuery(event.target.value)}
-                />
-
-              </div>
+                </div>
             </div>
             <div className="search-books-results">
-              <ol className="books-grid"></ol>
+                <ol className="books-grid">
+              
+                    {books.map( book =>
+                              (
+                                <li key= {book.id}>
+                                  <Book
+                                    book= {book}
+                                    changeShelf={props.changeShelf}/>
+                                </li>
+                              )
+                           )
+                    }
+                </ol>
             </div>
-          </div>
-        
+      </div>
     )
-   
-  }
 }
-    
+
 
 export default SearchBooks
 

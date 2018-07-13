@@ -8,25 +8,33 @@ import { Route } from 'react-router-dom'
 
 class BooksApp extends React.Component {
   state = {
+      books: [],
+      query: '',
+      searchResults: []
 
-    books: [],
-    
   }
 
-componentDidMount() {
-  this.fetchBooks();
-}
-fetchBooks(){
-  BooksAPI.getAll().then( books => {
-    this.setState({books});
-    console.log('books updated!');
-})
-}
-changeShelf = (book, shelf) =>{
-  console.log('updateBooks called', book, shelf);
-  BooksAPI.update(book, shelf);
-  this.fetchBooks();
-}
+  componentDidMount() {
+      this.fetchBooks();
+  }
+
+  fetchBooks(){
+      BooksAPI.getAll().then( books => {
+        this.setState({books});
+        console.log('books updated!');
+      })
+  }
+
+  changeShelf = (book, shelf) =>{
+      BooksAPI.update(book, shelf);
+      this.fetchBooks();
+  }
+
+  updateQuery = (query) => {
+    this.setState({ query: query.trim() })
+    console.log('update query called')
+
+  }
 
 
   render() {
@@ -35,40 +43,53 @@ changeShelf = (book, shelf) =>{
       {name: 'Read', id:'read'},
       {name: 'Want to read', id:'wantToRead'}
        ]
+    let query = this.state.query
 
+    if (query){
+        BooksAPI.search(query).then(books => {
+          this.setState({ searchResults: books })
+        })
+      }
     return (
       <div className="app">
-        <Route path='/search' component={SearchBooks}/>
 
-        <Route exact path='/' render={() => (
-          <div className="list-books">
-          <div className="list-books-title">
-            <h1>MyReads</h1>
-          </div>
-          <div className="list-books-content">
-            
-              {shelves.map( shelf =>
-              <div key={shelf.id}>
-                 <Bookshelf
-                 books={this.state.books}
-                 shelfName={shelf.name}
-                 id={shelf.id}
-                 changeShelf={this.changeShelf}
-                 />
-                  </div>
-              )}
+          <Route exact path='/' render={() => (
+            <div className="list-books">
+                <div className="list-books-title">
+                  <h1>MyReads</h1>
+                </div>
+                <div className="list-books-content">
+                    {shelves.map( shelf =>
+                        <div key={shelf.id}>
+                            <Bookshelf
+                                books={this.state.books}
+                                shelfName={shelf.name}
+                                id={shelf.id}
+                                changeShelf={this.changeShelf}
+                            />
+                        </div>
+                      )}
+                </div>
+            </div>
+          )}
+          />
 
-           
-          </div>
           <div className="open-search">
-            <Link 
-            to='/search'
-            >Add a book</Link>
-          </div>
-          
-        </div>
-        )}/>
+                <Link 
+                  to='/search'
+                  >Add a book
+                </Link>
+            </div>
 
+          <Route path='/search' render={() => (
+              <SearchBooks
+                  query={this.state.query}
+                  updateQuery={this.updateQuery}
+                  searchedBooks={this.state.searchResults}
+                  changeShelf={this.changeShelf}
+              />
+          )}
+          />
       </div>
     )
   }

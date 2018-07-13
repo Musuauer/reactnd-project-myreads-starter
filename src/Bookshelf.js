@@ -1,5 +1,6 @@
 import React from 'react'
 import Book from './Book'
+import sortBy from 'sort-by'
 
 
 function Bookshelf (props) {
@@ -7,6 +8,8 @@ function Bookshelf (props) {
     const books = props.books
     const shelf = props.id
 
+    books.sort(sortBy('title'))  // sort alphabetically
+    
     return (
       <div className="bookshelf">
       <h2 className="bookshelf-title">{props.shelfName}</h2>
