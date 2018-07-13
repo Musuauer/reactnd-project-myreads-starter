@@ -20,20 +20,27 @@ class BooksApp extends React.Component {
   }
 
 componentDidMount() {
+  this.fetchBooks();
+}
+fetchBooks(){
   BooksAPI.getAll().then( books => {
-    this.setState({books})
+    this.setState({books});
+    console.log('books updated!');
 })
 }
-
-updateBooks(book, shelf){
+changeShelf = (book, shelf) =>{
   console.log('updateBooks called', book, shelf);
   BooksAPI.update(book, shelf);
-
+  this.fetchBooks();
 }
 
-
   render() {
-   
+    const shelves = [
+      {name: 'Currently Reading', id:'currentlyReading'},
+      {name: 'Read', id:'read'},
+      {name: 'Want to read', id:'wantToRead'}
+       ]
+
     return (
       <div className="app">
         {this.state.showSearchPage ? (
@@ -44,16 +51,19 @@ updateBooks(book, shelf){
               <h1>MyReads</h1>
             </div>
             <div className="list-books-content">
-              <div>
-                <Bookshelf
-                books={this.state.books}
-                shelf={'Want to read'}
-                changeShelf={this.updateBooks}
-                />
-               
-                
+              
+                {shelves.map( shelf =>
+                <div key={shelf.id}>
+                   <Bookshelf
+                   books={this.state.books}
+                   shelfName={shelf.name}
+                   id={shelf.id}
+                   changeShelf={this.changeShelf}
+                   />
+                    </div>
+                )}
 
-              </div>
+             
             </div>
             <div className="open-search">
               <a onClick={() => this.setState({ showSearchPage: true })}>Add a book</a>

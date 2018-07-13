@@ -2,28 +2,24 @@ import React from 'react'
 import Book from './Book'
 
 
-class Bookshelf extends React.Component {
-  state = {
-   
-  }
-
+function Bookshelf (props) {
  
+    const books = props.books
+    const shelf = props.id
 
-  render(){
-    const books = this.props.books
     return (
       <div className="bookshelf">
-      <h2 className="bookshelf-title">{this.props.shelf}</h2>
+      <h2 className="bookshelf-title">{props.shelfName}</h2>
       <div className="bookshelf-books">
         <ol className="books-grid">
-  
-        {books.map( book => (
-          <li key= {book.id}> 
-          <Book
-          book= {book}
-          updateShelf={this.props.changeShelf}/>
-          
-        </li>
+        {books.filter( book =>
+                              (book.shelf === shelf)
+                      ).map( book => (
+          <li key= {book.id}>
+           <Book
+           book= {book}
+           changeShelf={props.changeShelf}/>
+          </li>
         )
 
         )}
@@ -35,7 +31,6 @@ class Bookshelf extends React.Component {
 
     )
   }
-}
 
 
 export default Bookshelf
