@@ -54,8 +54,6 @@ class BooksApp extends React.Component {
       {name: 'Want to read', id:'wantToRead'}
        ]
 
-   
-     
     return (
       <div className="app">
 
