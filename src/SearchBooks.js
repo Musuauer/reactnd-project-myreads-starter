@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import Book from './Book'
-import sortBy from 'sort-by'
+
 
 
 function SearchBooks (props) {
@@ -9,7 +9,7 @@ function SearchBooks (props) {
   let query = props.query
   const updateQuery = props.updateQuery
   
-  books.sort(sortBy('title'))  // sort alphabetically
+  // books.sort(sortBy('title'))  // sort alphabetically
     return (
      
       <div className="search-books">
@@ -24,7 +24,12 @@ function SearchBooks (props) {
                         type="text"
                         placeholder="Search by title or author"
                         value= {query}
-                        onChange={(event) => updateQuery(event.target.value)}
+                        onChange={(event) => {
+                          
+                          updateQuery(event.target.value);
+
+                        }
+                      }
                     />
 
                 </div>
@@ -32,7 +37,7 @@ function SearchBooks (props) {
             <div className="search-books-results">
                 <ol className="books-grid">
               
-                    {books.map( book =>
+                    {(books.length > 0) && books.map( book =>
                               (
                                 <li key= {book.id}>
                                   <Book

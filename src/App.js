@@ -21,18 +21,28 @@ class BooksApp extends React.Component {
   fetchBooks(){
       BooksAPI.getAll().then( books => {
         this.setState({books});
-        console.log('books updated!');
+        console.log('books fetched')
       })
   }
 
   changeShelf = (book, shelf) =>{
       BooksAPI.update(book, shelf);
+      console.log('changeshelf called')
       this.fetchBooks();
   }
 
   updateQuery = (query) => {
-    this.setState({ query: query.trim() })
-    console.log('update query called')
+    this.setState({ query: query })
+    
+    if(query.length > 0){
+      BooksAPI.search(query).then(books => {
+        this.setState({ searchResults: books })
+      })}
+      else {
+        this.setState({ searchResults: [] })
+       console.log(this.state.searchResults)
+      }
+   
 
   }
 
@@ -43,13 +53,9 @@ class BooksApp extends React.Component {
       {name: 'Read', id:'read'},
       {name: 'Want to read', id:'wantToRead'}
        ]
-    let query = this.state.query
 
-    if (query){
-        BooksAPI.search(query).then(books => {
-          this.setState({ searchResults: books })
-        })
-      }
+   
+     
     return (
       <div className="app">
 
