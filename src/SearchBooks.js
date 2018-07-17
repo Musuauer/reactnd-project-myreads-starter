@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom'
 import Book from './Book'
 
 function SearchBooks (props) {
-  let books = props.searchedBooks
+  let searchedBooks = props.searchedBooks
   const updateQuery = props.updateQuery
+  let shelfBooks = props.shelfBooks
 
-  // books.sort(sortBy('title'))  // sort alphabetically
   return (
 
     <div className='search-books'>
@@ -32,7 +32,14 @@ function SearchBooks (props) {
       <div className='search-books-results'>
         <ol className='books-grid'>
 
-          {(books.length > 0) && books.map(book =>
+          {/* Check if the book is already in the selves
+            * If yes, don't show it in the results, then generate the HTML for the results
+            */}
+          {(searchedBooks.length > 0) && searchedBooks.filter(searchedBook =>
+            !shelfBooks.some(shelfBook =>
+              shelfBook.id === searchedBook.id
+            )
+          ).map(book =>
             (
               <li key={book.id}>
                 <Book
