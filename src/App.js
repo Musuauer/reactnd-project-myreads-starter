@@ -9,7 +9,12 @@ class BooksApp extends React.Component {
   state = {
     books: [],
     query: '',
-    searchResults: []
+    searchResults: [],
+    shelves: [
+      {name: 'Currently Reading', id: 'currentlyReading'},
+      {name: 'Read', id: 'read'},
+      {name: 'Want to read', id: 'wantToRead'}
+    ]
   }
 
   componentDidMount () {
@@ -33,30 +38,20 @@ class BooksApp extends React.Component {
     const updatedBook = {...book, shelf}
     BooksAPI.update(book, shelf)
       .then(() => this.updateBookLocally(updatedBook))
-    console.log('changeShelf called')
   }
 
   updateQuery = (query) => {
     if (query.length > 0) {
-      console.log('if called, query1:', query)
       BooksAPI.search(query).then(books => {
         this.setState({ searchResults: books })
-        console.log('booksAPI called', 'query2:', query)
       })
     } else {
       this.setState({ query: '' })
       this.setState({ searchResults: [] })
-      console.log('last query:', query, 'this.state.query:', this.state.query)
     }
   }
 
   render () {
-    const shelves = [
-      {name: 'Currently Reading', id: 'currentlyReading'},
-      {name: 'Read', id: 'read'},
-      {name: 'Want to read', id: 'wantToRead'}
-    ]
-
     return (
       <div className='app'>
 
@@ -67,12 +62,12 @@ class BooksApp extends React.Component {
               <h1>MyReads</h1>
             </div>
             <div className='list-books-content'>
-              {shelves.map(shelf =>
+              {this.state.shelves.map(shelf =>
                 <div key={shelf.id}>
                   <Bookshelf
                     books={this.state.books}
                     shelfName={shelf.name}
-                    id={shelf.id}
+                    shelfId={shelf.id}
                     changeShelf={this.changeShelf}
                   />
                 </div>

@@ -4,8 +4,11 @@ import sortBy from 'sort-by'
 
 function Bookshelf (props) {
   const books = props.books
-  const shelf = props.id
+  const shelf = props.shelfId
 
+  { /*   Create a new array that only has the books
+    *   of the same shelf value
+    */ }
   let filteredBooks = books.filter(book =>
     (book.shelf === shelf))
 

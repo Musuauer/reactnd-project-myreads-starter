@@ -2,13 +2,8 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import Book from './Book'
 
-function SearchBooks (props) {
-  let searchedBooks = props.searchedBooks
-  const updateQuery = props.updateQuery
-  let shelfBooks = props.shelfBooks
-
+function SearchBooks ({searchedBooks, updateQuery, shelfBooks, changeShelf}) {
   return (
-
     <div className='search-books'>
       <div className='search-books-bar'>
         <Link
@@ -20,20 +15,15 @@ function SearchBooks (props) {
           <input
             type='text'
             placeholder='Search by title or author'
-            onChange={(event) => {
-              console.log('event:', event.target.value)
-              updateQuery(event.target.value)
-            }
-            }
+            onChange={(event) => { updateQuery(event.target.value) }}
           />
-
         </div>
       </div>
       <div className='search-books-results'>
         <ol className='books-grid'>
 
           {/* Check if the book is already in the selves
-            * If yes, don't show it in the results, then generate the HTML for the results
+            * If it is, don't show it in the results, then generate the HTML for the results
             */}
           {(searchedBooks.length > 0) && searchedBooks.filter(searchedBook =>
             !shelfBooks.some(shelfBook =>
@@ -44,7 +34,7 @@ function SearchBooks (props) {
               <li key={book.id}>
                 <Book
                   book={book}
-                  changeShelf={props.changeShelf} />
+                  changeShelf={changeShelf} />
               </li>
             )
           )
