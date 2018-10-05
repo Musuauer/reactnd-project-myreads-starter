@@ -3,14 +3,11 @@ import Book from './Book'
 import sortBy from 'sort-by'
 
 function Bookshelf (props) {
-  const books = props.books
-  const shelf = props.shelfId
+  const { books, shelfId } = props
 
-  { /*   Create a new array that only has the books
-    *   of the same shelf value
-    */ }
+  //  Create a new array that only has the books of the same shelf value
   let filteredBooks = books.filter(book =>
-    (book.shelf === shelf))
+    (book.shelf === shelfId))
 
   books.sort(sortBy('title')) // sort alphabetically
 

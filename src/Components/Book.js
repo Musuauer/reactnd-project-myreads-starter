@@ -2,7 +2,7 @@
 import React from 'react'
 
 function Book (props) {
-  const {changeShelf, book} = props
+  const { changeShelf, book } = props
   const noCoverImage = './nocover.jpg'
 
   return (
@@ -11,10 +11,7 @@ function Book (props) {
       <div className='book-top'>
         <div className='book-cover'
           style={{
-            width: 128,
-            height: 193,
             background: `url(${book.imageLinks ? book.imageLinks.thumbnail : noCoverImage})`
-
           }} />
         <div className='book-shelf-changer'>
           <select
